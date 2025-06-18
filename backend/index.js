@@ -12,11 +12,11 @@ const PORT = 3001;
 app.post('/chat', async (req, res) => {
   const { message } = req.body;
 
-  const apiKey = "你的DeepSeek API KEY";
-  
+  const apiKey = "key";
+
   try {
-    const response = await axios.post('https://api.deepseek.com/v1/chat/completions', {
-      model: "deepseek-chat",
+    const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+      model: "ft:gpt-4o-2024-08-06:personal:liver:BjRU8n0t",  // <-- your fine-tuned model name
       messages: [
         { role: "system", content: "你是一个专业的围术期管理AI助手，专门解答患者在术前、术中、术后的常见问题，请用简单清晰的语言帮助患者。" },
         { role: "user", content: message }
@@ -28,7 +28,7 @@ app.post('/chat', async (req, res) => {
 
     res.json({ reply: response.data.choices[0].message.content });
   } catch (error) {
-    console.error(error);
+    console.error(error.response ? error.response.data : error.message);
     res.status(500).json({ reply: "AI 暂时无法回答，请联系医生。" });
   }
 });
